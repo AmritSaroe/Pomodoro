@@ -19,8 +19,8 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Publish Application
-      # Compiles into a single, trimmed EXE (approx 30MB or less)
-      run: dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true -o ./publish
+      # REMOVED /p:PublishTrimmed=true to fix the error
+      run: dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true /p:SelfContained=true -o ./publish
 
     - name: Verify Build
       run: |
@@ -34,6 +34,4 @@ jobs:
     - name: Send to Telegram
       if: success()
       run: |
-        # We use curl to send the document. 
-        # The -v flag gives verbose output so you can debug in GitHub Actions logs if it fails.
         curl -v -F "chat_id=${{ secrets.TELEGRAM_TO }}" -F document=@"./publish/ZenFocus.exe" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument
