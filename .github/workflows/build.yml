@@ -1,4 +1,4 @@
-name: Build and Send to Telegram
+name: Build and Send Link
 
 on:
   push:
@@ -19,19 +19,18 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Publish Application
-      # REMOVED /p:PublishTrimmed=true to fix the error
+      # We are compressing it into a single file. It will be large (~160MB) but requires no installation.
       run: dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true /p:SelfContained=true -o ./publish
 
-    - name: Verify Build
+    - name: Upload and Message
       run: |
-        if (Test-Path "./publish/ZenFocus.exe") {
-            Write-Host "Build Successful. File exists."
-        } else {
-            Write-Error "Build Failed. File not found."
-            exit 1
-        }
+        # 1. Upload the file to transfer.sh (Free, secure, temporary hosting)
+        # We capture the output URL into a variable
+        $url = curl --upload-file "./publish/ZenFocus.exe" "https://transfer.sh/ZenFocus.exe"
+        
+        Write-Host "File uploaded to: $url"
 
-    - name: Send to Telegram
-      if: success()
-      run: |
-        curl -v -F "chat_id=${{ secrets.TELEGRAM_TO }}" -F document=@"./publish/ZenFocus.exe" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument
+        # 2. Send that URL to your Telegram
+        $message = "✅ Build Success! Download your app here: $url"
+        
+        curl -F "chat_id=${{ secrets.TELEGRAM_TO }}" -F "text=$message" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
