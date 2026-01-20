@@ -19,7 +19,7 @@
             
             <TextBlock Grid.Row="0" Text="ZEN FOCUS" Foreground="#888888" 
                        HorizontalAlignment="Left" VerticalAlignment="Center" 
-                       FontSize="12" FontWeight="Bold" LetterSpacing="2"/>
+                       FontSize="12" FontWeight="Bold"/>
 
             <TextBlock x:Name="TimerText" Grid.Row="1" Text="25:00" 
                        Foreground="#FFFFFF" FontSize="80" FontWeight="Thin"
