@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -6,6 +7,20 @@ namespace ZenFocus
 {
     public partial class MainWindow : Window
     {
+        // ---------------------------------------------------------
+        // THE FIX: This is the "Ignition Key" the compiler was looking for.
+        // It tells the app to create a new application instance and open this window.
+        // ---------------------------------------------------------
+        [STAThread]
+        public static void Main()
+        {
+            Application app = new Application();
+            app.Run(new MainWindow());
+        }
+
+        // ---------------------------------------------------------
+        // APP LOGIC
+        // ---------------------------------------------------------
         private DispatcherTimer _timer;
         private int _timeLeft;
         private const int WorkTime = 25 * 60;
@@ -20,7 +35,7 @@ namespace ZenFocus
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
 
-            // Allow dragging the window
+            // Allow dragging the window by clicking anywhere
             this.MouseLeftButtonDown += (s, e) => DragMove();
         }
 
