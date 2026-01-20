@@ -1,0 +1,55 @@
+<Window x:Class="ZenFocus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ZenFocus" Height="450" Width="400"
+        WindowStyle="None" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+
+    <Border CornerRadius="20" Background="#1E1E1E" BorderBrush="#333333" BorderThickness="1">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <RowDefinition Height="*"/>    <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="✕" Click="CloseApp_Click" 
+                        Background="Transparent" Foreground="#888888" BorderThickness="0"
+                        FontSize="16" Cursor="Hand"/>
+            </StackPanel>
+            
+            <TextBlock Grid.Row="0" Text="ZEN FOCUS" Foreground="#888888" 
+                       HorizontalAlignment="Left" VerticalAlignment="Center" 
+                       FontSize="12" FontWeight="Bold" LetterSpacing="2"/>
+
+            <TextBlock x:Name="TimerText" Grid.Row="1" Text="25:00" 
+                       Foreground="#FFFFFF" FontSize="80" FontWeight="Thin"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <ProgressBar x:Name="ProgressBar" Grid.Row="2" Height="6" 
+                         BorderThickness="0" Background="#333333" Foreground="#007ACC"
+                         Value="100" Maximum="100" Margin="0,20"/>
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <Button x:Name="BtnToggle" Content="START" Click="ToggleTimer_Click"
+                        Width="100" Height="40" Background="#007ACC" Foreground="White"
+                        BorderThickness="0" FontSize="14" FontWeight="Bold" Margin="10">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button Content="RESET" Click="ResetTimer_Click"
+                        Width="100" Height="40" Background="#333333" Foreground="White"
+                        BorderThickness="0" FontSize="14" FontWeight="Bold" Margin="10">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
