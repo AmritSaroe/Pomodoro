@@ -1,0 +1,39 @@
+name: Build and Send to Telegram
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Publish Application
+      # Compiles into a single, trimmed EXE (approx 30MB or less)
+      run: dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true -o ./publish
+
+    - name: Verify Build
+      run: |
+        if (Test-Path "./publish/ZenFocus.exe") {
+            Write-Host "Build Successful. File exists."
+        } else {
+            Write-Error "Build Failed. File not found."
+            exit 1
+        }
+
+    - name: Send to Telegram
+      if: success()
+      run: |
+        # We use curl to send the document. 
+        # The -v flag gives verbose output so you can debug in GitHub Actions logs if it fails.
+        curl -v -F "chat_id=${{ secrets.TELEGRAM_TO }}" -F document=@"./publish/ZenFocus.exe" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument
